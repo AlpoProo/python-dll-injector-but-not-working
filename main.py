@@ -20,7 +20,7 @@ try:
     PROCESS_CREATE_THREAD = 0x0002
     PROCESS_ALL_ACCESS = PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION | PROCESS_QUERY_INFORMATION | PROCESS_CREATE_THREAD
 
-    # Yönetici kontrolü ve UAC istemi
+   
     def is_admin():
         try:
             return ctypes.windll.shell32.IsUserAnAdmin()
@@ -28,7 +28,7 @@ try:
             return False
 
     if not is_admin():
-        # Re-run the program with admin rights, might trigger UAC prompt
+        
         ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
         sys.exit(0)
     
@@ -49,7 +49,7 @@ try:
 
     def get_icon_for_process(pid):
         try:
-            if pid == 0:  # System Idle Process
+            if pid == 0: 
                 return None
             handle = win32api.OpenProcess(win32con.PROCESS_QUERY_INFORMATION | win32con.PROCESS_VM_READ, False, pid)
             _, exe_path = win32process.GetModuleFileNameEx(handle, 0)
@@ -62,7 +62,7 @@ try:
             return None
 
     def update_process_list(search_term=None):
-        process_listbox.delete(0, tk.END)  # Listeyi temizleyin
+        process_listbox.delete(0, tk.END)  
         processes = get_all_processes()
         if search_term:
             processes = [(name, pid, icon) for name, pid, icon in processes if search_term.lower() in name.lower()]
@@ -102,7 +102,7 @@ try:
             messagebox.showerror("Error", "Memory allocation failed!")
             return
 
-        # Belleği yazılabilir yapmak için VirtualProtectEx kullanma
+        
         old_protect = ctypes.c_uint32()
         ctypes.windll.kernel32.VirtualProtectEx(process_handle.handle, addr, dll_len, win32con.PAGE_EXECUTE_READWRITE, ctypes.byref(old_protect))
 
@@ -128,7 +128,7 @@ try:
 
     def get_process_pid(process_name):
         for proc in win32process.EnumProcesses():
-            if proc == 0:  # System Idle Process
+            if proc == 0:  
                 continue
             try:
                 handle = win32api.OpenProcess(PROCESS_ALL_ACCESS, False, proc)
@@ -156,7 +156,7 @@ try:
     frame = tk.Frame(root)
     frame.pack(pady=20, padx=20)
 
-    # Arama özellikleri
+    
     lbl_search = tk.Label(frame, text="Search:")
     lbl_search.grid(row=0, column=0, sticky='w')
 
